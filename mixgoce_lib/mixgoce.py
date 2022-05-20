@@ -1,4 +1,5 @@
 # Paste mixgoce.py
+# Optimize requests  	—— dahanzmin 2205012
 
 import board
 from rtc import RTC
@@ -47,39 +48,38 @@ except Exception as e:
 ADDITIONAL_TOPIC = 'b640a0ce465fa2a4150c36b305c1c11b'
 WILL_TOPIC = '9d634e1a156dc0c1611eb4c3cff57276'
 
-def ntp(url='http://mixio.mixly.org/time.php'):
+def requests_init():
 	import ssl
 	import wifi
 	import socketpool
 	import adafruit_requests
-	#TEXT_URL = 'http://mixio.mixly.org/time.php'
-	#TEXT_URL = url
 	pool = socketpool.SocketPool(wifi.radio)
 	requests = adafruit_requests.Session(pool, ssl.create_default_context())
-	# print("Fetching text from", TEXT_URL)
-	response = requests.get(url)
-	# print("-" * 40)
-	# print(tuple(response.text.split(",")))
-	# print("-" * 40)
+	return requests
+
+requests=None
+	
+def ntp(url='http://mixio.mixly.org/time.php'):
+	global requests
+	if requests is None:
+		requests=requests_init()	
+	try:
+		response = requests.get(url)
+	except Exception as e:
+		raise RuntimeError("Maybe WiFi is not connected",e)	
 	return tuple(response.text.split(","))
 	
 def analyse_sharekey(url):
-	import ssl
-	import wifi
-	import socketpool
-	import adafruit_requests
 	import json
-	#TEXT_URL = 'http://mixio.mixly.org/time.php'
-	#TEXT_URL = url
-	pool = socketpool.SocketPool(wifi.radio)
-	requests = adafruit_requests.Session(pool, ssl.create_default_context())
-	# print("Fetching text from", TEXT_URL)
-	response = requests.get(url)
-	# print("-" * 40)
-	# print(tuple(response.text.split(",")))
-	# print("-" * 40)
+	global requests
+	if requests is None:
+		requests=requests_init()
+	try:
+		response = requests.get(url)
+	except Exception as e:
+		raise RuntimeError("Maybe WiFi is not connected",e)
 	if response.text == '-1':
-		print('Invalid share key')
+		raise RuntimeError('Invalid share key')
 	else:
 		result = json.loads(response.text)
 		return (result['0'], result['1'], result['2'])

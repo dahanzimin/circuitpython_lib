@@ -66,5 +66,3 @@ class MSA301:
 		y_acc=((self.u2s(self.data_reg[3])<<8|self.data_reg[2])>>2)/1024.0
 		z_acc=((self.u2s(self.data_reg[5])<<8|self.data_reg[4])>>2)/1024.0
 		return (-y_acc,-x_acc,z_acc)
-
-

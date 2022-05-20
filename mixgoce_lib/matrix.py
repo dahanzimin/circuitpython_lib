@@ -269,9 +269,3 @@ class MatrixBackpack16x8(HT16K33):
     def rows(self):
         """Read-only property for number of rows"""
         return self._rows
-
-
-
-
-
-

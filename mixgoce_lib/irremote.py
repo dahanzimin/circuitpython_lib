@@ -103,9 +103,3 @@ def ir_send_hex(content="0XFF000000", pin=board.IO39): # [255, 0, 0, 0]
     encoder.transmit(pulseout, decode2list(content))
     print("IR signal sent!")
     pulseout.deinit()
-	
-
-
-	
-	
-	
