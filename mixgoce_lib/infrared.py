@@ -7,7 +7,7 @@ CircuitPython library for Infrared Sensor - MixGoCE
 Small Cabbage
 20210721
 dahanzimin
-20210423
+20220715
 """
 
 from mixgoce import version
@@ -28,6 +28,21 @@ if version:#new
 		IR.deinit()
 		pwm.deinit()
 		return reaction > val
+
+	def near_value(x):
+		from analogio import AnalogIn
+		
+		pwm = PWMOut(board.IO39, frequency=50000, duty_cycle=65535)
+		if x == 'left':
+			IR=AnalogIn(board.IO3)
+			reaction = IR.value
+		if x == 'right':
+			IR=AnalogIn(board.IO16)
+			reaction = IR.value
+		IR.deinit()
+		pwm.deinit()
+		return reaction 
+
 else:#old
 	def near(x, val=10000):
 		from digitalio import DigitalInOut, Direction
@@ -39,3 +54,6 @@ else:#old
 		IR.deinit()
 		pwm.deinit()
 		return reaction
+
+	def near_value(x):
+		return near(x)

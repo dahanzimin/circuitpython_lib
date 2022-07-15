@@ -7,7 +7,7 @@ CircuitPython library for TouchPad - MixGoCE
 Small Cabbage
 20210721
 dahanzimin
-20210423
+20220715
 """
 import board
 from touchio import TouchIn
@@ -18,6 +18,9 @@ class TouchPad():
 
     def is_touched(self):
         return self.pin.raw_value > self.v 
+
+    def raw_value(self):
+        return self.pin.raw_value
 
 touch_T1 = TouchPad(board.IO4)
 touch_T2 = TouchPad(board.IO5)
